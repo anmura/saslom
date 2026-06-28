@@ -705,7 +705,8 @@
                     const sec = card.querySelector('.comments-section');
                     const open = sec.style.display === 'none';
                     sec.style.display = open ? 'block' : 'none';
-                    card.querySelector('.comments-toggle').textContent = open ? '💬 СКРЫТЬ' : '💬 КОМЕНТЫ';
+                    const cnt = globalComments[card.dataset.name];
+                    card.querySelector('.comments-toggle').textContent = open ? '💬 СКРЫТЬ' : (cnt !== undefined ? `💬 КОМЕНТЫ (${cnt.length})` : '💬 КОМЕНТЫ');
                 });
 
                 // submit comment
@@ -755,6 +756,10 @@
         // ── COMMENTS ──
         function renderComments(card, comments) {
             const list = card.querySelector('.comment-list');
+            const toggle = card.querySelector('.comments-toggle');
+            const isOpen = card.querySelector('.comments-section').style.display !== 'none';
+            const count = comments ? comments.length : 0;
+            if (!isOpen) toggle.textContent = count > 0 ? `💬 КОМЕНТЫ (${count})` : '💬 ···';
             if (!comments || comments.length === 0) {
                 list.innerHTML = '<div class="comment-empty">пока тишина... 👻</div>';
                 return;
